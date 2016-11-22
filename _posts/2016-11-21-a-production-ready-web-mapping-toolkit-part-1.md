@@ -305,9 +305,9 @@ or you could use something like [WinSCP](https://winscp.net/eng/index.php).  In 
 Once that change has been saved, cd to the cookie_cutter_demo directory (where the dev.yml file is located) and use docker-compose to build and run the main containers.
 
 ```
-dave@django-base:~/cc_demo/cookie_cutter_demo$ docker-compose -f dev.yml build
-dave@django-base:~/cc_demo/cookie_cutter_demo$ docker-compose -f dev.yml up -d
-dave@django-base:~/cc_demo/cookie_cutter_demo$ docker-compose -f dev.yml ps
+docker-compose -f dev.yml build
+docker-compose -f dev.yml up -d
+docker-compose -f dev.yml ps
 ```
 
 The first time we run the __build__ command it will take a while to download and configure everything.  The __ps__ command should show us something like this:
