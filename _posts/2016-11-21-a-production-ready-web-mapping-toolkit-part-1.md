@@ -35,8 +35,231 @@ NOTE:  If you want to use SSH keys as mentioned in step 6, [here is a useful tut
 
 You will need an SSH client to do this, I use [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) and it works pretty well.  If you are using an SSH key, you should follow the tutorial linked above, otherwise log in using the password that DO will have emailed you.  Either way, you will need to know the IP address of the droplet, which can be copied off the DO web page.  
 
+## Create A User Account   
+
+Once you are logged in as root, create a non-root user, add them to the docker and sudo groups, then switch user (su) to that account:   
+
 ```
-This is example code
+root@django-base:~# useradd -m -d /home/dave -s /bin/bash -U dave
+root@django-base:~# passwd dave      
+root@django-base:~# usermod -a -G docker dave
+root@django-base:~# usermod -a -G sudo dave
+root@django-base:~# su -l dave
+dave@django-base:~$
+
+```
+If you are not familiar with some of these linux commands, [here is a useful cheat sheet](http://linoxide.com/linux-command/linux-commands-cheat-sheet/) to get you started.    
+
+## Install Some Useful Tools   
+
+We're going to need some python tools for this work, so lets install [pip](https://pypi.python.org/pypi/pip), [virtualenv](https://virtualenv.pypa.io/en/stable/), and [cookiecutter](https://www.pydanny.com/cookie-project-templates-made-easy.html)   
+
+```
+dave@django-base:~$ sudo apt-get update
+dave@django-base:~$ sudo apt-get install python-pip
+dave@django-base:~$ sudo apt-get install virtualenv
+dave@django-base:~$ pip install "cookiecutter>=1.4.0"
+
+```
+
+##  Create A New Directory And Use Cookiecutter-Django   
+
+The next bit uses some awesome templating work that is provided by Daniel Greenfield (pydanny), one of the co-authors of the book [Two Scoops of Django](https://www.twoscoopspress.com/products/two-scoops-of-django-1-8), which I highly recommend.  We will create a new directory called cc_demo, cd into that directory, then run the cookiecutter script using the cookiecutter-django recipe on github.  The script will ask a bunch of questions, which we will mostly accept the defaults for, see the following for my changes:      
+
+```
+dave@django-base:~$ mkdir cc_demo
+dave@django-base:~$ cd cc_demo/
+dave@django-base:~/cc_demo$ ls
+dave@django-base:~/cc_demo$ cookiecutter https://github.com/pydanny/cookiecutter-django
+Cloning into 'cookiecutter-django'...
+remote: Counting objects: 8324, done.
+remote: Compressing objects: 100% (50/50), done.
+remote: Total 8324 (delta 27), reused 0 (delta 0), pack-reused 8274
+Receiving objects: 100% (8324/8324), 2.91 MiB | 0 bytes/s, done.
+Resolving deltas: 100% (5373/5373), done.
+Checking connectivity... done.
+project_name [Project Name]: Cookie Cutter Demo
+project_slug [cookie_cutter_demo]:
+author_name [Daniel Roy Greenfeld]: David Currie
+email [you@example.com]: dcurrie@geoanalytic.com
+description [A short description of the project.]: A demo website
+domain_name [example.com]: .positionbot.com
+version [0.1.0]:
+timezone [UTC]: America/Edmonton
+use_whitenoise [y]:
+use_celery [n]:
+use_mailhog [n]:
+use_sentry_for_error_reporting [y]:
+use_opbeat [n]:
+use_pycharm [n]:
+windows [n]:
+use_python3 [y]:
+use_docker [y]:
+use_heroku [n]:
+use_elasticbeanstalk_experimental [n]:
+use_compressor [n]:
+Select postgresql_version:
+1 - 9.5
+2 - 9.4
+3 - 9.3
+4 - 9.2
+Choose from 1, 2, 3, 4 [1]:
+Select js_task_runner:
+1 - Gulp
+2 - Grunt
+3 - None
+Choose from 1, 2, 3 [1]:
+use_lets_encrypt [n]: y
+Select open_source_license:
+1 - MIT
+2 - BSD
+3 - GPLv3
+4 - Apache Software License 2.0
+5 - Not open source
+Choose from 1, 2, 3, 4, 5 [1]:
+You selected to use docker and a JS task runner. This is NOT supported out of the box for now. You can continue to use the project like you normally would, but you will need to add a js task runner service to your docker configuration manually.
+You selected to use Let's Encrypt, please see the documentation for instructions on how to use this in production. You must generate a dhparams.pem file before running docker-compose in a production environment.
+dave@django-base:~/cc_demo$
+```
+
+Once the script is finished, you should have a new directory created within the cc_demo directory which contains all the goodness of the cookiecutter-django recipe.  Here is the tree view of the directory that I get:  
+
+```
+cookie_cutter_demo/
+├── compose
+│   ├── django
+│   │   ├── Dockerfile
+│   │   ├── Dockerfile-dev
+│   │   ├── entrypoint.sh
+│   │   ├── gunicorn.sh
+│   │   └── start-dev.sh
+│   ├── nginx
+│   │   ├── dhparams.example.pem
+│   │   ├── Dockerfile
+│   │   ├── nginx.conf
+│   │   ├── nginx-secure.conf
+│   │   └── start.sh
+│   └── postgres
+│       ├── backup.sh
+│       ├── Dockerfile
+│       ├── list-backups.sh
+│       └── restore.sh
+├── config
+│   ├── __init__.py
+│   ├── settings
+│   │   ├── common.py
+│   │   ├── __init__.py
+│   │   ├── local.py
+│   │   ├── production.py
+│   │   └── test.py
+│   ├── urls.py
+│   └── wsgi.py
+├── CONTRIBUTORS.txt
+├── cookie_cutter_demo
+│   ├── contrib
+│   │   ├── __init__.py
+│   │   └── sites
+│   │       ├── __init__.py
+│   │       └── migrations
+│   │           ├── 0001_initial.py
+│   │           ├── 0002_alter_domain_unique.py
+│   │           ├── 0003_set_site_domain_and_name.py
+│   │           └── __init__.py
+│   ├── __init__.py
+│   ├── static
+│   │   ├── css
+│   │   │   └── project.css
+│   │   ├── fonts
+│   │   ├── images
+│   │   │   └── favicon.ico
+│   │   ├── js
+│   │   │   └── project.js
+│   │   └── sass
+│   │       └── project.scss
+│   ├── templates
+│   │   ├── 403_csrf.html
+│   │   ├── 404.html
+│   │   ├── 500.html
+│   │   ├── account
+│   │   │   ├── account_inactive.html
+│   │   │   ├── base.html
+│   │   │   ├── email_confirm.html
+│   │   │   ├── email.html
+│   │   │   ├── login.html
+│   │   │   ├── logout.html
+│   │   │   ├── password_change.html
+│   │   │   ├── password_reset_done.html
+│   │   │   ├── password_reset_from_key_done.html
+│   │   │   ├── password_reset_from_key.html
+│   │   │   ├── password_reset.html
+│   │   │   ├── password_set.html
+│   │   │   ├── signup_closed.html
+│   │   │   ├── signup.html
+│   │   │   ├── verification_sent.html
+│   │   │   └── verified_email_required.html
+│   │   ├── base.html
+│   │   ├── bootstrap4
+│   │   │   ├── field.html
+│   │   │   └── layout
+│   │   │       └── field_errors_block.html
+│   │   ├── pages
+│   │   │   ├── about.html
+│   │   │   └── home.html
+│   │   └── users
+│   │       ├── user_detail.html
+│   │       ├── user_form.html
+│   │       └── user_list.html
+│   └── users
+│       ├── adapters.py
+│       ├── admin.py
+│       ├── apps.py
+│       ├── __init__.py
+│       ├── migrations
+│       │   ├── 0001_initial.py
+│       │   └── __init__.py
+│       ├── models.py
+│       ├── tests
+│       │   ├── factories.py
+│       │   ├── __init__.py
+│       │   ├── test_admin.py
+│       │   ├── test_models.py
+│       │   ├── test_urls.py
+│       │   └── test_views.py
+│       ├── urls.py
+│       └── views.py
+├── dev.yml
+├── docker-compose.yml
+├── docs
+│   ├── conf.py
+│   ├── deploy.rst
+│   ├── docker_ec2.rst
+│   ├── index.rst
+│   ├── __init__.py
+│   ├── install.rst
+│   ├── make.bat
+│   └── Makefile
+├── env.example
+├── gulpfile.js
+├── LICENSE
+├── manage.py
+├── package.json
+├── pytest.ini
+├── README.rst
+├── requirements
+│   ├── base.txt
+│   ├── local.txt
+│   ├── production.txt
+│   └── test.txt
+├── setup.cfg
+└── utility
+    ├── install_os_dependencies.sh
+    ├── install_python_dependencies.sh
+    ├── requirements-jessie.apt
+    ├── requirements-trusty.apt
+    └── requirements-xenial.apt
+
+28 directories, 103 files
+
 ```
 
 ![_config.yml]({{ site.baseurl }}/images/config.png)
