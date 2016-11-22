@@ -14,7 +14,9 @@ The long term goal of this series of posts is to develop a set of ready to use t
 This first post will deal with getting the basic server set up.  By the end of this post, you should have a cloud based server, running Docker, with separate containers running PostGIS, Django, Nginx, and Certbot.  Later posts will deal with writing Django apps to handle back end tasks and hooking up javascript mapping libraries to our web pages.   
 
 ----------   
-# Get Yourself A Droplet From The Digital Ocean  
+
+# Get Yourself A Droplet From The Digital Ocean   
+
 I'm going to assume that all the work will be done in the cloud.  If you already have a cloud service you are using, then you may have to adapt some of the commands to work with your service.  If you don't have a cloud service account, may I suggest [DigitalOcean](https://www.digitalocean.com/)?  The service is easy to use and low cost and, best of all, if you sign up through [my referral link](https://m.do.co/c/07e7a94179df) you will recieve a $10 credit to get started.  Since this tutorial will run on the lowest cost server on DO, that will cover you for two months of free experimentation.   
 
 So, you have your Digital Ocean account?  Great, now;  
@@ -24,11 +26,18 @@ So, you have your Digital Ocean account?  Great, now;
 4. select the $5 __size__ option - this gives you one CPU with 512MB of RAM and a 20GB SSD  
 5. select the __datacenter region__ nearest to you  
 6. (optional) upload an __SSH key__ for secure login   
-7. choose a __host name__, such as docker-demo   
+7. choose a __host name__, such as django-base   
 8. click the __create__ button  
 
+NOTE:  If you want to use SSH keys as mentioned in step 6, [here is a useful tutorial on how to do that](https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-putty-on-digitalocean-droplets-windows-users).  If you skip this step, DO will email you a password that will allow you to log in as root.   
 
+# Log in to your server  
 
+You will need an SSH client to do this, I use [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) and it works pretty well.  If you are using an SSH key, you should follow the tutorial linked above, otherwise log in using the password that DO will have emailed you.  Either way, you will need to know the IP address of the droplet, which can be copied off the DO web page.  
+
+```
+This is example code
+```
 
 ![_config.yml]({{ site.baseurl }}/images/config.png)
 
