@@ -31,7 +31,9 @@ So, you have your Digital Ocean account?  Great, now;
 
 NOTE:  If you want to use SSH keys as mentioned in step 6, [here is a useful tutorial on how to do that](https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-putty-on-digitalocean-droplets-windows-users).  If you skip this step, DO will email you a password that will allow you to log in as root.   
 
-# Log in to your server  
+![_config.yml]({{ site.baseurl }}/images/post1/create_droplet.gif)
+
+# Configure The server     
 
 You will need an SSH client to do this, I use [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) and it works pretty well.  If you are using an SSH key, you should follow the tutorial linked above, otherwise log in using the password that DO will have emailed you.  Either way, you will need to know the IP address of the droplet, which can be copied off the DO web page.  
 
@@ -52,15 +54,25 @@ If you are not familiar with some of these linux commands, [here is a useful che
 
 ## Install Some Useful Tools   
 
-We're going to need some python tools for this work, so lets install [pip](https://pypi.python.org/pypi/pip), [virtualenv](https://virtualenv.pypa.io/en/stable/), and [cookiecutter](https://www.pydanny.com/cookie-project-templates-made-easy.html)   
+We're going to need some python tools for this work, so lets install [pip](https://pypi.python.org/pypi/pip), [virtualenv](https://virtualenv.pypa.io/en/stable/), [cookiecutter](https://www.pydanny.com/cookie-project-templates-made-easy.html), and [docker-compose](https://docs.docker.com/compose/overview/).   
 
 ```
 dave@django-base:~$ sudo apt-get update
 dave@django-base:~$ sudo apt-get install python-pip
 dave@django-base:~$ sudo apt-get install virtualenv
 dave@django-base:~$ pip install "cookiecutter>=1.4.0"
-
+dave@django-base:~$ pip install docker-compose
 ```
+
+# Use an Existing Template   
+
+A common pattern for configuring web services is to have a set of docker containers, each of which serves a specific purpose.  In our case, we want:   
+* a database container to store data and serve requests,   
+* a django container to provide CRUD services and content management,   
+* an nginx container to provide a web server,    
+* a certbot container to manage security certificates   
+
+To achieve this quickly, we will leverage the good work of some very smart people.   
 
 ##  Create A New Directory And Use Cookiecutter-Django   
 
@@ -262,6 +274,9 @@ cookie_cutter_demo/
 
 ```
 
-![_config.yml]({{ site.baseurl }}/images/config.png)
+Most of this stuff is specific to django and its supporting tools.  The docker specific bits are found in the compose directory plus the two .yml files in the root directory.  
+##
+
+
 
 The easiest way to make your first post is to edit this one. Go into /_posts/ and update the Hello World markdown file. For more instructions head over to the [Jekyll Now repository](https://github.com/barryclark/jekyll-now) on GitHub.
