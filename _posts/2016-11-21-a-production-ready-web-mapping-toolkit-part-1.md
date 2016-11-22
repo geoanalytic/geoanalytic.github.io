@@ -3,7 +3,7 @@ layout: post
 title: A production ready web mapping toolkit - Part 1
 ---
 
-The long term goal of this series of posts is to develop a set of ready to use tools that will enable the rapid setup of web mapping servers that can be prototyped, developed, and moved to production without a lot of embarassing oversights.  The key technologies that I want to use are:   
+The long term goal of this series of posts is to develop a set of ready to use tools that will enable the rapid setup of web mapping servers that can be prototyped, developed, and moved to production without a lot of embarrassing oversights.  The key technologies that I want to use are:   
 
 * [PostgreSQL](https://www.postgresql.org)/[PostGIS](http://www.postgis.net)   
 * [Django](https://www.djangoproject.com/)/[Python](https://www.python.org/)/[GeoDjango](https://docs.djangoproject.com/en/1.10/ref/contrib/gis/)   
@@ -17,7 +17,7 @@ This first post will deal with getting the basic server set up.  By the end of t
 
 # Get Yourself A Droplet From The Digital Ocean   
 
-I'm going to assume that all the work will be done in the cloud.  If you already have a cloud service you are using, then you may have to adapt some of the commands to work with your service.  If you don't have a cloud service account, may I suggest [DigitalOcean](https://www.digitalocean.com/)?  The service is easy to use and low cost and, best of all, if you sign up through [my referral link](https://m.do.co/c/07e7a94179df) you will recieve a $10 credit to get started.  Since this tutorial will run on the lowest cost server on DO, that will cover you for two months of free experimentation.   
+I'm going to assume that all the work will be done in the cloud.  If you already have a cloud service you are using, then you may have to adapt some of the commands to work with your service.  If you don't have a cloud service account, may I suggest [DigitalOcean](https://www.digitalocean.com/)?  The service is easy to use and low cost and, best of all, if you sign up through [my referral link](https://m.do.co/c/07e7a94179df) you will receive a $10 credit to get started.  Since this tutorial will run on the lowest cost server on DO, that will cover you for two months of free experimentation.   
 
 So, you have your Digital Ocean account?  Great, now;  
 1. click on the __Create Droplet__ link   
@@ -96,7 +96,7 @@ project_slug [cookie_cutter_demo]:
 author_name [Daniel Roy Greenfeld]: David Currie
 email [you@example.com]: dcurrie@geoanalytic.com
 description [A short description of the project.]: A demo website
-domain_name [example.com]: .positionbot.com
+domain_name [example.com]: positionbot.com
 version [0.1.0]:
 timezone [UTC]: America/Edmonton
 use_whitenoise [y]:
@@ -134,6 +134,8 @@ You selected to use docker and a JS task runner. This is NOT supported out of th
 You selected to use Let's Encrypt, please see the documentation for instructions on how to use this in production. You must generate a dhparams.pem file before running docker-compose in a production environment.
 dave@django-base:~/cc_demo$
 ```
+
+Note that if you don't have a domain name under your control, that question can be skipped but several components won't work, including TLS encryption and mail service with MailGun.  
 
 Once the script is finished, you should have a new directory created within the cc_demo directory which contains all the goodness of the cookiecutter-django recipe.  Here is the tree view of the directory that I get:  
 
@@ -275,4 +277,88 @@ cookie_cutter_demo/
 
 ```
 
-Most of this stuff is specific to django and its supporting tools.  The docker specific bits are found in the compose directory plus the two .yml files in the root directory.  
+Most of this stuff is specific to django and its supporting tools.  We'll get into those later.  The docker specific bits are found in the compose and requirements directories plus the two .yml files in the root directory.   
+
+## Time To Start With The Source Code Control   
+
+This is a good time to start saving our work. 
+
+```
+git init
+git add .
+git commit -m “First commit”
+
+```
+
+# Bring Up The Development Server   
+
+The default cookiecutter-django installation gives us two docker configurations as .yml files.  If we use the dev.yml file, only the database and django containers will be run.  The django webserver will be run on port 8000.  This is a good way to test a few things but is __not__ recommended for production.  Before we can get started, we need to change one file: config/settings/local.py.  To do this we need a text editor.  You could use nano on the command line:
+
+```
+nano config/settings/local.py
+```
+
+or you could use something like [WinSCP](https://winscp.net/eng/index.php).  In any case, you need to specify the ALLOWED_HOSTS setting to be the IP address of your server.  Mine looks like this:
+
+![_config.yml]({{ site.baseurl }}/images/post1/localpy.png)  
+
+Once that change has been saved, cd to the cookie_cutter_demo directory (where the dev.yml file is located) and use docker-compose to build and run the main containers.
+
+```
+dave@django-base:~/cc_demo/cookie_cutter_demo$ docker-compose -f dev.yml build
+dave@django-base:~/cc_demo/cookie_cutter_demo$ docker-compose -f dev.yml up -d
+dave@django-base:~/cc_demo/cookie_cutter_demo$ docker-compose -f dev.yml ps
+```
+
+The first time we run the __build__ command it will take a while to download and configure everything.  The __ps__ command should show us something like this:
+
+![_config.yml]({{ site.baseurl }}/images/post1/dockerps.png)  
+
+## Migrations and Superuser   
+
+Before we can access the site, we need to migrate the database and create a superuser.
+
+```
+docker-compose -f dev.yml run django python manage.py makemigrations
+docker-compose -f dev.yml run django python manage.py migrate
+docker-compose -f dev.yml run django python manage.py createsuperuser
+```
+
+The above commands should be explained.  Each one invokes the __run__ command on the __django__ container (which is described in the __dev.yml__ file).  Within the container, __python__ will be invoked to run the __manage.py__ script with the specified option.  These options are covered early in the [django tutorial](https://docs.djangoproject.com/en/1.10/intro/tutorial01/).   
+
+## Test the Django Code   
+
+Now we should be able to run some tests using py.test.  
+
+![_config.yml]({{ site.baseurl }}/images/post1/pytest.png)  
+
+Woot!  Note that the basic cookiecutter-django package has 100% test coverage.  Nowhere to go but down from here.  The server should be running at port 8000 of the our droplet.  
+
+![_config.yml]({{ site.baseurl }}/images/post1/basepage.png)   
+
+Not much to see there, but since we are using the development server, any changes we make will be updated right away.  Let's edit the file cookie_cutter_demo/templates/pages/home.html   
+
+![_config.yml]({{ site.baseurl }}/images/post1/homehtml.png) 
+
+And reload the web page.
+
+![_config.yml]({{ site.baseurl }}/images/post1/timetoboogie.png)  
+
+Using the superuser credentials we created earlier, we can access the django administration pages like so:
+
+![_config.yml]({{ site.baseurl }}/images/post1/admin.png)  
+
+# Clean Up   
+
+That should do it for this post.  The next steps will be:
+
+* swap out the PostgreSQL container for one with PostGIS   
+* configure and run the production server, which uses an Nginx container and serves secure web pages with LetsEncrypt!  
+* Then we can get into the meat of developing some django applications
+
+Before we finish, we will stop and remove the docker containers.   
+
+```
+docker-compose -f dev.yml down
+```
+
