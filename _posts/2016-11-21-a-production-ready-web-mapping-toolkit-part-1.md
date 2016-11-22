@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: A production ready web mapping toolkit - Part 1
 ---
 
