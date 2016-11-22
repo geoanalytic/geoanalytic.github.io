@@ -20,6 +20,7 @@ This first post will deal with getting the basic server set up.  By the end of t
 I'm going to assume that all the work will be done in the cloud.  If you already have a cloud service you are using, then you may have to adapt some of the commands to work with your service.  If you don't have a cloud service account, may I suggest [DigitalOcean](https://www.digitalocean.com/)?  The service is easy to use and low cost and, best of all, if you sign up through [my referral link](https://m.do.co/c/07e7a94179df) you will receive a $10 credit to get started.  Since this tutorial will run on the lowest cost server on DO, that will cover you for two months of free experimentation.   
 
 So, you have your Digital Ocean account?  Great, now;  
+
 1. click on the __Create Droplet__ link   
 2. click the __One-click Apps__ tab   
 3. select __Docker 1.12.3 on 16.04__ (note these version numbers will change in the future)   
@@ -41,7 +42,7 @@ You will need an SSH client to do this, I use [PuTTY](http://www.chiark.greenend
 
 Once you are logged in as root, create a non-root user, add them to the docker and sudo groups, then switch user (su) to that account:   
 
-```
+```shell
 root@django-base:~# useradd -m -d /home/dave -s /bin/bash -U dave
 root@django-base:~# passwd dave      
 root@django-base:~# usermod -a -G docker dave
@@ -56,7 +57,7 @@ If you are not familiar with some of these linux commands, [here is a useful che
 
 We're going to need some python tools for this work, so lets install [pip](https://pypi.python.org/pypi/pip), [virtualenv](https://virtualenv.pypa.io/en/stable/), [cookiecutter](https://www.pydanny.com/cookie-project-templates-made-easy.html), and [docker-compose](https://docs.docker.com/compose/overview/).   
 
-```
+```shell
 dave@django-base:~$ sudo apt-get update
 dave@django-base:~$ sudo apt-get install python-pip
 dave@django-base:~$ sudo apt-get install virtualenv
@@ -79,7 +80,7 @@ To achieve this quickly, we will leverage the good work of some very smart peopl
 
 The next bit uses some awesome templating work that is provided by Daniel Greenfield (pydanny), one of the co-authors of the book [Two Scoops of Django](https://www.twoscoopspress.com/products/two-scoops-of-django-1-8), which I highly recommend.  We will create a new directory called cc_demo, cd into that directory, then run the cookiecutter script using the cookiecutter-django recipe on github.  The script will ask a bunch of questions, which we will mostly accept the defaults for, see the following for my changes:      
 
-```
+```shell
 dave@django-base:~$ mkdir cc_demo
 dave@django-base:~$ cd cc_demo/
 dave@django-base:~/cc_demo$ ls
@@ -139,7 +140,7 @@ Note that if you don't have a domain name under your control, that question can 
 
 Once the script is finished, you should have a new directory created within the cc_demo directory which contains all the goodness of the cookiecutter-django recipe.  Here is the tree view of the directory that I get:  
 
-```
+```shell
 cookie_cutter_demo/
 ├── compose
 │   ├── django
@@ -283,7 +284,7 @@ Most of this stuff is specific to django and its supporting tools.  We'll get in
 
 This is a good time to start saving our work. 
 
-```
+```shell
 git init
 git add .
 git commit -m “First commit”
@@ -294,7 +295,7 @@ git commit -m “First commit”
 
 The default cookiecutter-django installation gives us two docker configurations as .yml files.  If we use the dev.yml file, only the database and django containers will be run.  The django webserver will be run on port 8000.  This is a good way to test a few things but is __not__ recommended for production.  Before we can get started, we need to change one file: config/settings/local.py.  To do this we need a text editor.  You could use nano on the command line:
 
-```
+```shell
 nano config/settings/local.py
 ```
 
@@ -304,7 +305,7 @@ or you could use something like [WinSCP](https://winscp.net/eng/index.php).  In 
 
 Once that change has been saved, cd to the cookie_cutter_demo directory (where the dev.yml file is located) and use docker-compose to build and run the main containers.
 
-```
+```shell
 docker-compose -f dev.yml build
 docker-compose -f dev.yml up -d
 docker-compose -f dev.yml ps
@@ -318,7 +319,7 @@ The first time we run the __build__ command it will take a while to download and
 
 Before we can access the site, we need to migrate the database and create a superuser.
 
-```
+```shell
 docker-compose -f dev.yml run django python manage.py makemigrations
 docker-compose -f dev.yml run django python manage.py migrate
 docker-compose -f dev.yml run django python manage.py createsuperuser
@@ -358,7 +359,7 @@ That should do it for this post.  The next steps will be:
 
 Before we finish, we will stop and remove the docker containers.   
 
-```
+```shell
 docker-compose -f dev.yml down
 ```
 
