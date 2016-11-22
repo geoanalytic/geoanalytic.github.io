@@ -11,7 +11,7 @@ The long term goal of this series of posts is to develop a set of ready to use t
 * [Leaflet](http://leafletjs.com/) and [Openlayers](https://openlayers.org/)  
 * TLS/HTTPS using [LetsEncrypt!](https://letsencrypt.org/)
 
-This first post will deal with getting the basic server set up.  By the end of this post, you should have a cloud based server, running Docker, with separate containers running PostGIS, Django, Nginx, and Certbot.  Later posts will deal with writing Django apps to handle back end tasks and hooking up javascript mapping libraries to our web pages.   
+This first post will deal with getting the basic server set up.  By the end of this post, you should have a cloud based server, running Docker, with separate containers running PostgreSQL, Django, Nginx, and Certbot.  Later posts will deal with installing PostGIS, writing Django apps to handle back end tasks and hooking up javascript mapping libraries to our web pages.   
 
 ----------   
 
@@ -67,6 +67,7 @@ dave@django-base:~$ pip install docker-compose
 # Use an Existing Template   
 
 A common pattern for configuring web services is to have a set of docker containers, each of which serves a specific purpose.  In our case, we want:   
+
 * a database container to store data and serve requests,   
 * a django container to provide CRUD services and content management,   
 * an nginx container to provide a web server,    
@@ -275,8 +276,3 @@ cookie_cutter_demo/
 ```
 
 Most of this stuff is specific to django and its supporting tools.  The docker specific bits are found in the compose directory plus the two .yml files in the root directory.  
-##
-
-
-
-The easiest way to make your first post is to edit this one. Go into /_posts/ and update the Hello World markdown file. For more instructions head over to the [Jekyll Now repository](https://github.com/barryclark/jekyll-now) on GitHub.
