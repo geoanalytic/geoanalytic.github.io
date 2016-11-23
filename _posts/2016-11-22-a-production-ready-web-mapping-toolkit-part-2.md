@@ -14,7 +14,8 @@ We begin by logging in to our DO server using PuTTY and switching to our non-roo
 
 # Going Spatial   
 
-Since we are doing mapping, we need spatial query capabilities, so bog standard PostgreSQL won't be sufficient, we need [PostGIS](http://www.postgis.net).  One way to get this would be to insert the installation instructions for PostGIS into the Postgres dockerfile, but since we are shamelessly using the hard work of others anyway let's just grab a dockerfile that does it all for us.  I like [this one](https://github.com/kartoza/docker-postgis) but there are others that will probably work well too.  
+Since we are doing mapping, we need spatial query capabilities, so bog standard PostgreSQL won't be sufficient, we need [PostGIS](http://www.postgis.net).  One way to get this would be to insert the installation instructions for PostGIS into the Postgres dockerfile, but since we are shamelessly using the hard work of others anyway let's just grab a dockerfile that does it all for us.  I like [this one](https://github.com/kartoza/docker-postgis) but there are others that will probably work well too.    
+
 ## Get A PostGIS Dockerfile   
 
 To get it, we will change to the `compose` directory and clone the repository.   
@@ -64,7 +65,7 @@ Once we are happy with our new database, we can remove the `postgres` directory 
 
 While the standard django installation includes the geodjango code, it relies on some other things which are not automatically installed in the django container.  We'll edit the file `compose/django/dockerfile-dev` so it looks like this:    
 
-```docker
+```shell
 FROM python:3.5
 
 ENV PYTHONUNBUFFERED 1
@@ -92,7 +93,7 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 Note the `RUN apt-get ...` lines are the changes.  The same changes will need to be applied to `compose/django/dockerfile`, which should end up looking like this:   
 
-```docker
+```shell
 FROM python:3.5
 
 ENV PYTHONUNBUFFERED 1
@@ -221,7 +222,7 @@ We will make some similar changes to the `docker-compose.yml` file, but we'll pu
 
 ## Change Our Django Settings   
 
-We'll be editing the django settings a lot as we add new apps, but before we can use the spatial database we need to add a couple of lines to the file `config/settings/common.py` in two specific spots.  First, add the line `    'django.contrib.gis',` in the `DJANGO_APPS` section as shown:          
+We'll be editing the django settings a lot as we add new apps, but before we can use the spatial database we need to add a couple of lines to the file `config/settings/common.py` in two specific spots.  First, add the line `"django.contrib.gis",` in the `DJANGO_APPS` section as shown:          
 
 ```python
 DJANGO_APPS = (
@@ -349,32 +350,35 @@ from django.contrib.gis.geos import Point
 
 # Tests for geodata classes
 
-class TestLocation(TestCase):
-    first_point = Location()
-    first_point.name = "The first point"
-    first_point.mpoint = Point(-112.54, 68.9)
-    first_point.save()
+class LocationModelTest(TestCase):
 
-    second_point = Location()
-    second_point.name = "The second point"
-    second_point.mpoint = Point(149.36, -10.52)
-    second_point.save() 
+    def test_saving_and_retrieving_locations(self):
+        first_point = Location()
+        first_point.name = "The first point"
+        first_point.mpoint = Point(-112.54, 68.9)
+        first_point.save()
 
-    saved_points = Location.objects.all()
-    self.assertEqual(saved_points.count(), 2)
+        second_point = Location()
+        second_point.name = "The second point"
+        second_point.mpoint = Point(149.36, -10.52)
+        second_point.save() 
 
-    first_saved_point = saved_points[0]
-    self.assertEqual(first_saved_point.name, "The first point" )
-    self.assertEqual(first_saved_point.mpoint.x, -112.54)
-    self.assertEqual(first_saved_point.mpoint.y, 68.9)
+        saved_points = Location.objects.all()
+        self.assertEqual(saved_points.count(), 2)
 
-    second_saved_point = saved_points[1]
-    self.assertEqual(second_saved_point.name, "The second point" )
-    self.assertEqual(second_saved_point.mpoint.x, 149.36)
-    self.assertEqual(second_saved_point.mpoint.y, -10.52)
+        first_saved_point = saved_points[0]
+        self.assertEqual(first_saved_point.name, "The first point" )
+        self.assertEqual(first_saved_point.mpoint.x, -112.54)
+        self.assertEqual(first_saved_point.mpoint.y, 68.9)
+
+        second_saved_point = saved_points[1]
+        self.assertEqual(second_saved_point.name, "The second point" )
+        self.assertEqual(second_saved_point.mpoint.x, 149.36)
+        self.assertEqual(second_saved_point.mpoint.y, -10.52)
+
 ```
 
-This will test point creation, saving, and retrieval from the database.  We'll make a data model later that has two fields, a `name` and a `point`.  First we need to get the test to fail.  Now we can run the test from the console:   
+This will test point creation, saving, and retrieval from the database.  We'll make a data model later that has two fields, a `name` and a `mpoint`.  First we need to get the test to fail.  Now we can run the test from the console:   
 
 ```shell
 docker-compose -f dev.yml run django python manage.py test geodata
@@ -436,7 +440,7 @@ admin.site.register(Location, admin.GeoModelAdmin)
 ```
 Now when we point our browser to the admin site, we should see our geodata-Location class.   
 
-![_config.yml]({{ site.baseurl }}/images/post2/admin.png)  
+![_config.yml]({{ site.baseurl }}/images/post2/admin1.png)  
 
 And when we click the `Add` link for a Location, we get a very nice slippy map to click on.   
 
