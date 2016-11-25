@@ -25,7 +25,7 @@ We begin by copying the file env.example to .env
 cp env.example .env
 ```
 
-Now we have a file that doesn't show up in directory listings (try `ls -a`) and is excluded from source control as it is specifically included in the .gitignore file.  If you are using WinSCP as an editor, you will need to select Preferences | Panels | Show hidden files to see the new file.  The file will look something like this:   
+Now we have a file that doesn't show up in directory listings (try `ls -a`) and is excluded from source control as it is specifically included in the .gitignore file.  If you are using WinSCP as an editor, you will need to select Preferences - Panels - Show hidden files to see the new file.  The file will look something like this:   
 
 ```
 # .env
@@ -72,7 +72,7 @@ As with the development system, we need to set the name of the DB and the allowe
 
 ## Select A Django Admin URL   
 
-Since the admin interface has so much power, we want to keep hackers from getting into it.  One step is to use a url other than the default `/admin`.  This entry must be filled in or the admin site won't be accessible online, even if you enable it in django.   
+Since the admin interface has so much power, we want to keep hackers from getting into it.  One trick is to use a url other than the default `/admin`.  This entry must be filled in or the admin site won't be accessible online, even if you enable it in django.   
 
 ## Change The Secret Key   
 
@@ -82,13 +82,21 @@ The most important thing to do is change the secret key and put a copy of it som
 function mk_dj_secret() { python -c "import random,string;print 'DJANGO_SECRET_KEY=%s'%''.join([random.SystemRandom().choice(\"{}{}{}\".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(63)])" ;}
 ```
 
+Then just call mk_dj_secret and copy/paste the resulting text.   
+
+```
+dave@django-base:~/cc_demo/cookie_cutter_demo$ mk_dj_secret
+DJANGO_SECRET_KEY=ICNXnJa@%QgP1yj[wqkqJF/VG*9K9?!Vv77=?"pZdW/<tp,4mxn[KlFMjzw|<fS
+```
+
 ## Change the Allowed Hosts   
 
 Also important, this is a security feature to prevent host header attacks.  As always, once you start using tools at a professional level, eventually you will have to [RTFM](https://docs.djangoproject.com/en/1.10/ref/settings/#allowed-hosts).   
 
 In my case, I'll use a host name of dev.positionbot.com.  This will work because I have created an A record for that URL using the DNS manager on Digital Ocean.  [Here is a tutorial on how to do that.](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-host-name-with-digitalocean)    
 
-Here is the relevant part of my .env file:   
+Here is the relevant part of my .env file:    
+
 ```
 # .env
 # PostgreSQL
@@ -233,7 +241,7 @@ class olGeoModelAdmin(admin.GeoModelAdmin):
 admin.site.register(Location, olGeoModelAdmin)
 ```
 
-All the above is a bit of a pain, and I am inclined to dump the whole OpenLayers thing and switch to [django-leaflet](https://github.com/makinacorpus/django-leaflet) and using it's admin widgets.  However we're almost there so we can leave that for later.   
+All the above is a bit of a pain, and I am inclined to dump the whole OpenLayers thing and switch to [django-leaflet](https://github.com/makinacorpus/django-leaflet) and use its admin widgets.  However we're almost there so we can leave that for later.   
 
 # Build and Run The Production Containers   
 
