@@ -218,10 +218,10 @@ cd /home/dave/cc_demo
 wget https://github.com/openlayers/ol2/releases/download/release-2.13.1/OpenLayers-2.13.1.tar.gz
 tar -xvf OpenLayers-2.13.1.tar.gz
 cp OpenLayers-2.13.1/OpenLayers.js cookie_cutter_demo/cookie_cutter_demo/static/js/OpenLayers.js
-mkdir cookie_cutter_demo/cookie_cutter_demo/static/img
-cp -r OpenLayers-2.13.1/img/* cookie_cutter_demo/cookie_cutter_demo/static/img
-mkdir cookie_cutter_demo/cookie_cutter_demo/static/theme
-cp -r OpenLayers-2.13.1/theme/* cookie_cutter_demo/cookie_cutter_demo/static/theme
+mkdir cookie_cutter_demo/cookie_cutter_demo/static/js/img
+cp -r OpenLayers-2.13.1/img/* cookie_cutter_demo/cookie_cutter_demo/static/js/img
+mkdir cookie_cutter_demo/cookie_cutter_demo/static/js/theme
+cp -r OpenLayers-2.13.1/theme/* cookie_cutter_demo/cookie_cutter_demo/static/js/theme
 ```
 
 Now, when we use one of the admin tools supplied in django.contrib.gis we need to subclass the tool and override the openlayers_url property.  So far, we only reference this in one place, our geodata/admin.py file.  Edit it to look like this:   

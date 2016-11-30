@@ -21,8 +21,7 @@ Since we are doing mapping, we need spatial query capabilities, so bog standard 
 To get it, we will change to the `compose` directory and clone the repository.   
 
 ```shell
-cd cc_demo/cookie-cutter-demo/compose
-git clone https://github.com/kartoza/docker-postgis.git
+git submodule add https://github.com/kartoza/docker-postgis.git compose/docker-postgis
 ```
 
 The `compose` directory should now look like this:   
