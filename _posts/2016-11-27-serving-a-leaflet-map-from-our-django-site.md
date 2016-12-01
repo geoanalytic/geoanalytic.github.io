@@ -112,7 +112,7 @@ We want to keep using the existing page templates for our HTML, so the first edi
 
 ## Write Some Javascript To Generate The Map   
 
-Perusing the base.html file, we see a reference a file called project.js where we are intended to place our project specific javascript.  We'll follow this structure for now but in the future we may find a need to develop a different set of templates for including our code.  If you have doubts about how this is all works, the [Django template engine documents](https://docs.djangoproject.com/en/1.10/topics/templates/) are pretty good.  We will edit the cookie-cutter-demo/static/js/project.js file and add some code:    
+Perusing the base.html file, we see a reference a file called project.js where we are intended to place our project specific javascript.  We'll follow this structure for now but in the future we may find a need to develop a different set of templates for including our code.  If you have doubts about how this is all works, the [Django template engine documents](https://docs.djangoproject.com/en/1.10/topics/templates/) are pretty good.  We will edit the `cookie-cutter-demo/static/js/project.js` file and add some code:    
 
 ```javascript
 var lon = -114;
@@ -243,7 +243,7 @@ The first requirement is pretty easy.  The latest [leaflet libraries](http://lea
 <!-- ... -->      
 ```
 
-Then we edit the cookie-cutter-demo/static/js/project.js, replacing the OpenLayers stuff we wrote before with the following:  
+Then we edit the `cookie-cutter-demo/static/js/project.js`, replacing the OpenLayers stuff we wrote before with the following:  
 
 ```javascript
 // project.js
