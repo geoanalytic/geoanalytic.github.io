@@ -101,7 +101,7 @@ If you followed my [earlier discussion](https://geoanalytic.github.io/a-producti
 ## Ensure the Javascript Are Loaded   
 
 We want to keep using the existing page templates for our HTML, so the first edit will be to the file cookie-cutter-demo/templates/base.html and add the links for the style.css and OpenLayers.js files in the indicated places.  
-
+{% raw %}
 ```html
 <!-- base.html -->
 <!-- ... -->
@@ -109,7 +109,7 @@ We want to keep using the existing page templates for our HTML, so the first edi
       <script src="{% static 'js/OpenLayers.js' %}"></script>
 <!-- ... -->   
 ```
-
+{% endraw %}
 ## Write Some Javascript To Generate The Map   
 
 Perusing the base.html file, we see a reference a file called project.js where we are intended to place our project specific javascript.  We'll follow this structure for now but in the future we may find a need to develop a different set of templates for including our code.  If you have doubts about how this is all works, the [Django template engine documents](https://docs.djangoproject.com/en/1.10/topics/templates/) are pretty good.  We will edit the `cookie-cutter-demo/static/js/project.js` file and add some code:    
@@ -146,7 +146,7 @@ You will see some code already in the project.js file, but since it's javascript
 ## Add A Map Div To The HTML   
 
 Next, we edit the file cookie-cutter-demo/templates/pages/home.html and insert a properly named div element.   
-
+{% raw %}
 ```html
 {% extends "base.html" %}
 
@@ -155,7 +155,7 @@ Next, we edit the file cookie-cutter-demo/templates/pages/home.html and insert a
 <div id="map" class="smallmap" style="height:800px"></div>
 {% endblock %}
 ```
-
+{% endraw %}
 ## Add A GeoJson Feed   
 
 Finally, we need to provide a feed for the GeoJson layer referenced in our javascript code.  The URL for our feed is given as geodata/data.geojson, so lets first hook it up.  Knowledge of the [django url mapping scheme](https://docs.djangoproject.com/en/1.10/intro/overview/#design-your-urls) goes a long way here, but basically all requests get routed through the file cookie-cutter-demo/config/urls.py which can be passed on to other bits of code.  We will direct any requests to `geodata` to be passed to our geodata app like so:    
