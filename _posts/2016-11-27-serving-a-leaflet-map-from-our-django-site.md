@@ -117,6 +117,8 @@ We want to keep using the existing page templates for our HTML, so the first edi
 Perusing the base.html file, we see a reference to a file called project.js where we are intended to place our project specific javascript.  We'll follow this structure for now but in the future we may find a need to develop a different set of templates for including our code.  If you have doubts about how this is all works, the [Django template engine documents](https://docs.djangoproject.com/en/1.10/topics/templates/) are pretty good.  We will edit the `cookie-cutter-demo/static/js/project.js` file and add some code:    
 
 ```javascript
+// static/js/project.js
+
 var lon = -114;
 var lat = 51;
 var zoom = 10;
@@ -139,7 +141,6 @@ function init(){
         })
     }); 
     map.addLayer(vector_layer);
-//    vector_layer.addFeatures(geojson_format.read(featurecollection));
 }
 window.onload = init;
 ```
@@ -148,9 +149,11 @@ You will see some code already in the project.js file, but since it's javascript
 
 ## Add A Map Div To The HTML   
 
-Next, we edit the file cookie-cutter-demo/templates/pages/home.html and insert a properly named div element.   
+Next, we edit the file cookie-cutter-demo/templates/pages/home.html and insert a properly named div element.  
+
 {% raw %}
 ```html
+<!-- templates/pages/home.html -->
 {% extends "base.html" %}
 
 {% block content %}
@@ -295,7 +298,7 @@ The points I put in the database are also showing up, and have popups bound to t
 
 # Phase 3:  Integrate the Django-Leaflet Package   
 
-The [django-leaflet])(https://github.com/makinacorpus/django-leaflet) package promises to provide full django integration, making it easy to use leaflet in both the admin and on user built pages and forms.  To use it, we will need to rebuild our django container.  First we will stop our docker-containers:  
+The [django-leaflet](https://github.com/makinacorpus/django-leaflet) package promises to provide full django integration, making it easy to use leaflet in both the admin and on user built pages and forms.  To use it, we will need to rebuild our django container.  First we will stop our docker-containers:  
 
 ```shell
 $ docker-compose -f dev.yml stop
