@@ -78,7 +78,7 @@ The bits about subclassing the OpenLayers.js library are only necessary if we ar
 
 At the end of this post, I want to have:  
 
-*  the home page of my dev.positionbot.com site show a slippy map with markers placed from the `location` table stored in the database.     
+*  the home page of my webtest.positionbot.com site show a slippy map with markers placed from the `location` table stored in the database.     
 
 If I get ambitious, I'd also like to have:   
 
@@ -100,7 +100,8 @@ If you followed my [earlier discussion](https://geoanalytic.github.io/a-producti
 
 ## Ensure the Javascript Are Loaded   
 
-We want to keep using the existing page templates for our HTML, so the first edit will be to the file cookie-cutter-demo/templates/base.html and add the links for the style.css and OpenLayers.js files in the indicated places.  
+We want to keep using the existing page templates for our HTML, so the first edit will be to the file cookie-cutter-demo/templates/base.html and add the links for the style.css and OpenLayers.js files in the indicated places.   
+
 {% raw %}
 ```html
 <!-- base.html -->
@@ -110,9 +111,10 @@ We want to keep using the existing page templates for our HTML, so the first edi
 <!-- ... -->   
 ```
 {% endraw %}
+
 ## Write Some Javascript To Generate The Map   
 
-Perusing the base.html file, we see a reference a file called project.js where we are intended to place our project specific javascript.  We'll follow this structure for now but in the future we may find a need to develop a different set of templates for including our code.  If you have doubts about how this is all works, the [Django template engine documents](https://docs.djangoproject.com/en/1.10/topics/templates/) are pretty good.  We will edit the `cookie-cutter-demo/static/js/project.js` file and add some code:    
+Perusing the base.html file, we see a reference to a file called project.js where we are intended to place our project specific javascript.  We'll follow this structure for now but in the future we may find a need to develop a different set of templates for including our code.  If you have doubts about how this is all works, the [Django template engine documents](https://docs.djangoproject.com/en/1.10/topics/templates/) are pretty good.  We will edit the `cookie-cutter-demo/static/js/project.js` file and add some code:    
 
 ```javascript
 var lon = -114;
@@ -141,6 +143,7 @@ function init(){
 }
 window.onload = init;
 ```
+
 You will see some code already in the project.js file, but since it's javascript, we can just insert our new code below it.    
 
 ## Add A Map Div To The HTML   
@@ -156,9 +159,10 @@ Next, we edit the file cookie-cutter-demo/templates/pages/home.html and insert a
 {% endblock %}
 ```
 {% endraw %}
+
 ## Add A GeoJson Feed   
 
-Finally, we need to provide a feed for the GeoJson layer referenced in our javascript code.  The URL for our feed is given as geodata/data.geojson, so lets first hook it up.  Knowledge of the [django url mapping scheme](https://docs.djangoproject.com/en/1.10/intro/overview/#design-your-urls) goes a long way here, but basically all requests get routed through the file cookie-cutter-demo/config/urls.py which can be passed on to other bits of code.  We will direct any requests to `geodata` to be passed to our geodata app like so:    
+Finally, we need to provide a feed for the GeoJson layer referenced in our javascript code.  The URL for our feed is set as geodata/data.geojson, so lets first hook it up.  Knowledge of the [django url mapping scheme](https://docs.djangoproject.com/en/1.10/intro/overview/#design-your-urls) goes a long way here, but basically all requests get routed through the file cookie-cutter-demo/config/urls.py which can be passed on to other bits of code.  We will direct any requests to `geodata` to be passed to our geodata app like so:    
 
 ```python
 # config/urls.py
@@ -175,7 +179,7 @@ urlpatterns = [
 # ...
 ```
 
-We also need to create a the referenced file geodata/urls.py as:
+We also need to create the referenced file geodata/urls.py as:
 
 ```python
 # geodata/urls.py
@@ -205,9 +209,14 @@ from .models import Location
 
 # Geojson serializer
 def geojsonFeed(request):
-    return HttpResponse(serialize('geojson', Location.objects.all(),fields=('name',)))
+    return HttpResponse(serialize('geojson', Location.objects.all(),fields=('name','mpoint')))
 ```
 
+We can now test our geojson feed - pointing our browser at the url geodata/data.geojson give us:  
+
+![_config.yml]({{ site.baseurl }}/images/post4/geojson.png)
+
+Note that I added the locations using the admin interface.   
 That should do it, our home page now looks like this:   
 
 ![_config.yml]({{ site.baseurl }}/images/post4/openlayers.png)
@@ -225,7 +234,7 @@ Here, the requirements are very similar to those for OpenLayers:
 1. Ensure the css and js files are loaded   
 2. Add our custom javascript to draw the map   
 3. Add a <div> element to the html    
-4. Serve a GeoJSON feed from our django site    
+4. Serve a GeoJSON feed from our django site - already done    
 
 The first requirement is pretty easy.  The latest [leaflet libraries](http://leafletjs.com/download.html) are hosted on a content delivery network, so we edit our cookie-cutter-demo/templates/base.html file and insert the references.  Note the css goes in the <head> section while the js goes at the end of <body>.   
 
@@ -282,4 +291,264 @@ No need to mess with the Django stuff as we should already have a geojson feed. 
 
 ![_config.yml]({{ site.baseurl }}/images/post4/leaflet_basic.png)
 
-The points I put in the database are also showing up, and have popups bound to the mouse click.  Note that there isn't really much functional difference between the OpenLayers map and the Leaflet version other than some styling and I believe either library is a good choice.   
+The points I put in the database are also showing up, and have popups bound to the mouse click.  Note that there isn't really much functional difference between the OpenLayers map and the Leaflet version other than some styling and I believe either library is a good choice for this application.  But I want to do much more than these simple examples, so let's move on to the next phase.   
+
+# Phase 3:  Integrate the Django-Leaflet Package   
+
+The [django-leaflet])(https://github.com/makinacorpus/django-leaflet) package promises to provide full django integration, making it easy to use leaflet in both the admin and on user built pages and forms.  To use it, we will need to rebuild our django container.  First we will stop our docker-containers:  
+
+```shell
+$ docker-compose -f dev.yml stop
+```
+
+> A note about the starting and stopping docker containers.  In previous steps, I used the `docker-compose down` command to stop all the containers, and delete their images, which also deletes all of the data stored in the database.  This is a good idea during development, but if we know we will want to have that data available (and we aren't changing the database structure) then using `docker-compose stop` followed by `docker-compose start` will save some effort.
+
+## Add Django-leaflet To The Requirements And Rebuild   
+
+Now we edit the cookie-cutter-demo/requirements/base.txt file and add django-leaflet to the list.   
+
+```
+# requirements/base.txt
+# ...
+# Your custom requirements go here
+django-leaflet
+```
+
+Once the file is saved, we can rebuild the containers and bring them up.    
+
+```shell
+$ docker-compose -f dev.yml build
+$ docker-compose -f dev.yml up -d
+```
+
+## Set Up Our Preferred Leaflet Configuration  
+
+We'll edit the `config/settings/common.py` file and make a few changes:  
+
+1. Add 'leaflet' to our list of 3rd Party Apps,  
+2. Add leaflet related options at the end of the file, like so:   
+
+```python
+# config/settings/common.py 
+# ...
+
+THIRD_PARTY_APPS = (
+    'crispy_forms',  # Form layouts
+    'allauth',  # registration
+    'allauth.account',  # registration
+    'allauth.socialaccount',  # registration
+    'leaflet', # django-leaflet
+)
+
+# Apps specific for this project go here.
+LOCAL_APPS = (
+    # custom users app
+    'cookie_cutter_demo.users.apps.UsersConfig',
+    # Your stuff: custom apps go here
+    'geodata',
+)
+
+# ...
+
+# Your common stuff: Below this line define 3rd party library settings
+# ------------------------------------------------------------------------------
+# Settings for Django-leaflet -- see https://github.com/makinacorpus/django-leaflet
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (51.0, -114.0),
+    'DEFAULT_ZOOM': 10,
+    'MIN_ZOOM': 3,
+    'MAX_ZOOM': 18,
+    'TILES': [('OpenStreetMap', 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {'attribution': '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>', 'maxZoom': 19}),
+              ('Toner', 'http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {'attribution': 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
+					'<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; ' +
+					'Map data {attribution.OpenStreetMap}','maxZoom': 20 }),
+			  ('Terrain', 'http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {'attribution': 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
+					'<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; ' +
+					'Map data {attribution.OpenStreetMap}','maxZoom': 18 })		],
+          
+    'SCALE': 'both',
+    'ATTRIBUTION_PREFIX': 'Powered by django-leaflet',
+    'MINIMAP': True,
+}
+```
+
+## Change Our HTML And Templates   
+
+Going back to the original template file `templates/base.html` we will make one change in each of the <head> and <body> sections, overwriting the work done previously.  Here is what the the relevant sections look like now:   
+
+{% raw %}
+```html
+<!-- templates/base.html -->
+{% load staticfiles i18n %}<!DOCTYPE html>
+<html lang="en">
+{% load leaflet_tags %}
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}Cookie Cutter Demo{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+    {% block css %}
+    <!-- Latest compiled and minified Bootstrap 4 Alpha 4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+
+    <!-- Your stuff: Third-party CSS libraries go here -->
+    {% leaflet_css %}
+    <!-- This file stores project-specific CSS -->
+    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+    <style>
+    .leaflet-container {  /* all maps */
+        width:  100%;
+        height: 600px;
+    }
+    </style>
+    {% endblock %}    
+  </head>
+
+<!-- ... -->
+      {% block content %}
+        <p>Use this document as a way to quick start any new project.</p>
+      {% endblock content %}
+      {% leaflet_map "yourmap" %}
+    </div> <!-- /container -->
+
+    {% block modal %}{% endblock modal %}
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% block javascript %}
+      <!-- Required by Bootstrap v4 Alpha 4 -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
+
+      <!-- Your stuff: Third-party javascript libraries go here -->
+      {% leaflet_js %}
+
+      <!-- place project specific Javascript in this file -->
+      
+      <script src="{% static 'js/project.js' %}"></script>
+      
+
+    {% endblock javascript %}
+    
+<!-- ... -->
+
+```
+{% endraw %}
+
+Four changes here:   
+
+1.  Added the instruction to `load leaflet_tags` at the beginning of the file,   
+2.  Added the `leaflet_css` tag to the head, plus some extra css (see below),   
+3.  Added the `leaflet_map` tag to the body. I only did this in the template because I can't get it to work inside a block within `home.html`.  This is something that will need to be figured out.   
+4.  Added the `leaflet_js` tag to the end of the body.  
+
+
+Note that I was lazy and just inserted some css directly into the template, rather than what I should have done which is to put it in the `css/project.css` file.  Since I anticipate there will be lots of edits relating to styling and layout, I'm sure this will get cleaned up later.   
+
+Next up is the `templates/pages/home.html` file, which now looks like this:   
+
+{% raw %}
+```html
+<!-- templates/pages/home.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Django-Leaflet Magic</h1>
+
+{% endblock %}
+
+```
+{% endraw %}
+
+## Add Some Javascript To Put Our Locations On The Map         
+
+Finally, I'll replace the javascript we put into the `js/project.js` file earlier with the following code:   
+
+```javascript
+// js/project.js
+
+var dataurl = '/geodata/data.geojson';   
+window.addEventListener("map:init", function (event) {
+    var map = event.detail.map;
+    // Download GeoJSON data with Ajax
+    fetch(dataurl)
+        .then(function(resp) {
+            return resp.json();
+        })
+        .then(function(data) {
+             L.geoJson(data, {
+                onEachFeature: function onEachFeature(feature, layer) {
+                  var props = feature.properties;
+                  var content = `<h3>${props.name}</h3>`;
+                  layer.bindPopup(content);
+              }}).addTo(map);
+        });        
+});
+
+```
+
+## Test It Out   
+
+Here is what the home page looks like now:   
+
+![_config.yml]({{ site.baseurl }}/images/post4/django-leaflet.png)  
+
+Some nice features of this implementation include the minimap plugin plus the easy ability to configure tile layers and other implementation details in one place - the django settings file.  I think this will be a good solution going forward, although I really need to figure out how to get the django-leaflet template tags to work within other templates so that I can get that `leaflet_map` tag out of the base.html template.   
+
+# Bring Up The Secure Site  
+
+Now that I have an app, simple as it is, I will stop the docker containers and bring up the full production setup with encryption.  There is just one tweak that needs to be done to the `config/settings/production.py` file as shown:   
+
+```python
+# config/settings/production.py
+
+# ...
+
+# Static Assets
+# ------------------------
+# DHC Commented this out - doesn't work with django-leaflet 
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ...
+
+```
+
+The reason seems to be a problem with django-leaflet not using lazy installation of assets which causes static files to be lost when whitenoise is used.  There is [some effort ongoing to fix it](https://github.com/makinacorpus/django-leaflet/pull/172), but for now this fixes the problem at the expense of not having our static assets compressed.     
+
+```shell
+$ docker-compose -f dev.yml down
+$ docker-compose build
+$ docker-compose up -d
+$ docker-compose ps
+$ docker-compose run django python manage.py makemigrations
+$ docker-compose run django python manage.py migrate
+$ docker-compose run django python manage.py createsuperuser
+```
+
+The container list looks good:   
+
+![_config.yml]({{ site.baseurl }}/images/post4/secure_containers.png)  
+
+And our site is up with a secure certificate, although the browser reports that it is requesting HTTP resources which are not secure.  Since these are the raster map tiles, I think that should be fine.
+
+![_config.yml]({{ site.baseurl }}/images/post4/mostly_secure.png)   
+
+# Final Thoughts   
+
+Well I didn't achieve all of my goals, which would involve capturing mouse clicks on the map and using the coordinate to perform a spatial query.  I'll leave that exercise for a future post.  Some issues that do need to be addressed with the existing site include:  
+
+* managing database backups and permanent data storage   
+* configuring MailGun so that the email user signup functions can work   
+
+

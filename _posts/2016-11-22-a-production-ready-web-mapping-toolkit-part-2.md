@@ -21,7 +21,7 @@ Since we are doing mapping, we need spatial query capabilities, so bog standard 
 To get it, we will change to the `compose` directory and clone the repository.   
 
 ```shell
-git submodule add https://github.com/kartoza/docker-postgis.git compose/docker-postgis
+$ git submodule add https://github.com/kartoza/docker-postgis.git compose/docker-postgis
 ```
 
 The `compose` directory should now look like this:   
@@ -263,9 +263,9 @@ Now we should be able to fire up our development server and see if it is working
 Back in the console, we will repeat the docker process to build and run the containers.     
 
 ```shell
-docker-compose -f dev.yml build
-docker-compose -f dev.yml up -d
-docker-compose -f dev.yml ps
+$ docker-compose -f dev.yml build
+$ docker-compose -f dev.yml up -d
+$ docker-compose -f dev.yml ps
 ```
 
 After all the pulling and unpacking is done, the `ps` command should once again show our two containers running.   
@@ -287,7 +287,7 @@ Now we should be able to access our django website at port 8000.
 And run the tests.   
 
 ```shell
-docker-compose -f dev.yml run django py.test
+$ docker-compose -f dev.yml run django py.test
 ```
 
 As you can see, our changes from before have been preserved even though we rebuilt the django container.  It still isn't doing much though.   Let's add some spatial data just to be sure everything is working.  But first....
@@ -297,8 +297,8 @@ As you can see, our changes from before have been preserved even though we rebui
 We'll remove the postgres branch from the compose directory and save our changes.   
 
 ```shell
-git rm -r compose/postgres
-git commit -am "Postgis working, not tested"
+$ git rm -r compose/postgres
+$ git commit -am "Postgis working, not tested"
 ```
 
 ## Add A GeoDjango App   
@@ -380,7 +380,7 @@ class LocationModelTest(TestCase):
 This will test point creation, saving, and retrieval from the database.  We'll make a data model later that has two fields, a `name` and a `mpoint`.  First we need to get the test to fail.  Now we can run the test from the console:   
 
 ```shell
-docker-compose -f dev.yml run django python manage.py test geodata
+$ docker-compose -f dev.yml run django python manage.py test geodata
 ```
 This should give a result as below:   
 
@@ -416,9 +416,9 @@ All that importing from the future and python 2 compatibility stuff is there to 
 Since we have made a change to a model, we have to migrate the database before we can test. This pattern should be getting familiar. We also need to collect the static assets that GeoDjango requires.   
 
 ```shell
-docker-compose -f dev.yml run django python manage.py makemigrations
-docker-compose -f dev.yml run django python manage.py migrate
-docker-compose -f dev.yml run django python manage.py collectstatic
+$ docker-compose -f dev.yml run django python manage.py makemigrations
+$ docker-compose -f dev.yml run django python manage.py migrate
+$ docker-compose -f dev.yml run django python manage.py collectstatic
 ```
 
 If we run the test now we get:   
@@ -457,6 +457,6 @@ That should do it for this post.  The next steps will be:
 Before we finish, we will stop and remove the docker containers.   
 
 ```shell
-docker-compose -f dev.yml down
+$ docker-compose -f dev.yml down
 ```
 

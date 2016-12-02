@@ -22,7 +22,7 @@ If you recall from the previous posts, we used cookiecutter to configure a djang
 We begin by copying the file env.example to .env   
 
 ```shell
-cp env.example .env
+$ cp env.example .env
 ```
 
 Now we have a file that doesn't show up in directory listings (try `ls -a`) and is excluded from source control as it is specifically included in the .gitignore file.  If you are using WinSCP as an editor, you will need to select Preferences - Panels - Show hidden files to see the new file.  The file will look something like this:   
@@ -79,7 +79,7 @@ Since the admin interface has so much power, we want to keep hackers from gettin
 The most important thing to do is change the secret key and put a copy of it someplace safe.  You can type random stuff in there or use this handy little script to generate a secret key on the command line:   
 
 ```shell
-function mk_dj_secret() { python -c "import random,string;print 'DJANGO_SECRET_KEY=%s'%''.join([random.SystemRandom().choice(\"{}{}{}\".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(63)])" ;}
+$ function mk_dj_secret() { python -c "import random,string;print 'DJANGO_SECRET_KEY=%s'%''.join([random.SystemRandom().choice(\"{}{}{}\".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(63)])" ;}
 ```
 
 Then just call mk_dj_secret and copy/paste the resulting text.   
@@ -117,7 +117,7 @@ DJANGO_ALLOWED_HOSTS=dev.positionbot.com
 Certbot, the service that gets SSL certificates from LetsEncrypt!, requires a Diffey-Hellman key to be generated before we can request certs.  We use openssl to generate one:   
 
 ```shell
-openssl dhparam -out /home/dave/cc_demo/cookie_cutter_demo/compose/nginx/dhparams.pem 2048
+$ openssl dhparam -out /home/dave/cc_demo/cookie_cutter_demo/compose/nginx/dhparams.pem 2048
 ```
 
 # A Few Other Things...   
@@ -214,14 +214,14 @@ Note the changes that I made:
 Here's a handy bit of hard won knowledge:  GeoDjango loads the OpenLayers javascript library from the openlayers.org site, which will raise an error when we run our site with SSL, since the openlayers.org site is HTTP only.  There is a simple fix for this, we will serve the widget from our site.  But first we have to download and install OpenLayers in the static folder of our main project so that the collectstatic command will find it later:   
 
 ```
-cd /home/dave/cc_demo
-wget https://github.com/openlayers/ol2/releases/download/release-2.13.1/OpenLayers-2.13.1.tar.gz
-tar -xvf OpenLayers-2.13.1.tar.gz
-cp OpenLayers-2.13.1/OpenLayers.js cookie_cutter_demo/cookie_cutter_demo/static/js/OpenLayers.js
-mkdir cookie_cutter_demo/cookie_cutter_demo/static/js/img
-cp -r OpenLayers-2.13.1/img/* cookie_cutter_demo/cookie_cutter_demo/static/js/img
-mkdir cookie_cutter_demo/cookie_cutter_demo/static/js/theme
-cp -r OpenLayers-2.13.1/theme/* cookie_cutter_demo/cookie_cutter_demo/static/js/theme
+$ cd /home/dave/cc_demo
+$ wget https://github.com/openlayers/ol2/releases/download/release-2.13.1/OpenLayers-2.13.1.tar.gz
+$ tar -xvf OpenLayers-2.13.1.tar.gz
+$ cp OpenLayers-2.13.1/OpenLayers.js cookie_cutter_demo/cookie_cutter_demo/static/js/OpenLayers.js
+$ mkdir cookie_cutter_demo/cookie_cutter_demo/static/js/img
+$ cp -r OpenLayers-2.13.1/img/* cookie_cutter_demo/cookie_cutter_demo/static/js/img
+$ mkdir cookie_cutter_demo/cookie_cutter_demo/static/js/theme
+$ cp -r OpenLayers-2.13.1/theme/* cookie_cutter_demo/cookie_cutter_demo/static/js/theme
 ```
 
 Now, when we use one of the admin tools supplied in django.contrib.gis we need to subclass the tool and override the openlayers_url property.  So far, we only reference this in one place, our geodata/admin.py file.  Edit it to look like this:   
@@ -248,19 +248,19 @@ All the above is a bit of a pain, and I am inclined to dump the whole OpenLayers
 If we did everything right, we can now go through the docker-compose and django management steps again:   
 
 ```
-docker-compose build
-docker-compose up -d
-docker-compose ps
-docker-compose run django python manage.py makemigrations
-docker-compose run django python manage.py migrate
-docker-compose run django python manage.py collectstatic
-docker-compose run django python manage.py createsuperuser
+$ docker-compose build
+$ docker-compose up -d
+$ docker-compose ps
+$ docker-compose run django python manage.py makemigrations
+$ docker-compose run django python manage.py migrate
+$ docker-compose run django python manage.py collectstatic
+$ docker-compose run django python manage.py createsuperuser
 ```
 
 Note that we have to perform the collectstatic and createsuperuser tasks again, since the last time we stopped the development server, we used the command `docker-compose -f dev.yml down` which should stop and remove all containers.  If you get an error trying to bring up the new session, try using this command:   
 
 ```
-docker-compose -f dev.yml rm postgres
+$ docker-compose -f dev.yml rm postgres
 ```
 
 Navigating to http://dev.positionbot.com shows that our server is redirecting us to the HTTPS port and returning secure pages.   

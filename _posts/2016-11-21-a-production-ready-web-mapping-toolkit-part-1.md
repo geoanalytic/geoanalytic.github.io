@@ -286,9 +286,9 @@ Most of this stuff is specific to django and its supporting tools.  We'll get in
 This is a good time to start saving our work. 
 
 ```shell
-git init
-git add .
-git commit -m “First commit”
+$ git init
+$ git add .
+$ git commit -m “First commit”
 
 ```
 
@@ -297,7 +297,7 @@ git commit -m “First commit”
 The default cookiecutter-django installation gives us two docker configurations as .yml files.  If we use the dev.yml file, only the database and django containers will be run.  The django webserver will be run on port 8000.  This is a good way to test a few things but is __not__ recommended for production.  Before we can get started, we need to change one file: config/settings/local.py.  To do this we need a text editor.  You could use nano on the command line:
 
 ```shell
-nano config/settings/local.py
+$ nano config/settings/local.py
 ```
 
 or you could use something like [WinSCP](https://winscp.net/eng/index.php).  In any case, you need to specify the ALLOWED_HOSTS setting to be the IP address of your server.  Mine looks like this:
@@ -307,9 +307,9 @@ or you could use something like [WinSCP](https://winscp.net/eng/index.php).  In 
 Once that change has been saved, cd to the cookie_cutter_demo directory (where the dev.yml file is located) and use docker-compose to build and run the main containers.
 
 ```shell
-docker-compose -f dev.yml build
-docker-compose -f dev.yml up -d
-docker-compose -f dev.yml ps
+$ docker-compose -f dev.yml build
+$ docker-compose -f dev.yml up -d
+$ docker-compose -f dev.yml ps
 ```
 
 The first time we run the __build__ command it will take a while to download and configure everything.  The __ps__ command should show us something like this:
@@ -321,9 +321,9 @@ The first time we run the __build__ command it will take a while to download and
 Before we can access the site, we need to migrate the database and create a superuser.
 
 ```shell
-docker-compose -f dev.yml run django python manage.py makemigrations
-docker-compose -f dev.yml run django python manage.py migrate
-docker-compose -f dev.yml run django python manage.py createsuperuser
+$ docker-compose -f dev.yml run django python manage.py makemigrations
+$ docker-compose -f dev.yml run django python manage.py migrate
+$ docker-compose -f dev.yml run django python manage.py createsuperuser
 ```
 
 The above commands should be explained.  Each one invokes the __run__ command on the __django__ container (which is described in the __dev.yml__ file).  Within the container, __python__ will be invoked to run the __manage.py__ script with the specified option.  These options are covered early in the [django tutorial](https://docs.djangoproject.com/en/1.10/intro/tutorial01/).   
@@ -361,6 +361,6 @@ That should do it for this post.  The next steps will be:
 Before we finish, we will stop and remove the docker containers.   
 
 ```shell
-docker-compose -f dev.yml down
+$ docker-compose -f dev.yml down
 ```
 
