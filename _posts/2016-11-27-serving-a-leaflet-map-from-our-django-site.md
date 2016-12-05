@@ -72,7 +72,7 @@ class olOSMGeoAdmin(admin.OSMGeoAdmin):
 admin.site.register(Location, olOSMGeoAdmin)
 ```
 
-The bits about subclassing the OpenLayers.js library are only necessary if we are serving our site from a secure (HTTPS) server.   
+The bits about sub-classing the OpenLayers.js library are only necessary if we are serving our site from a secure (HTTPS) server.   
 
 # Goals and Approach   
 
@@ -228,7 +228,7 @@ Not a pretty map, but a bit of mousing will confirm it is indeed responsive.  We
 
 ![_config.yml]({{ site.baseurl }}/images/post4/openlayers_points.png)
 
-Well, it works, and I have no doubt that with some judicious tweaking of the various html, css, and javascript we could achieve a satisfactory presentation.  However, and this is one of my major misgivings about GeoDjango, we are using a deprecated verion of OpenLayers (2.13) rather than the [current version](http://openlayers.org/).  So I won't take this any further.  Let's see if we can get the same result using Leaflet.   
+Well, it works, and I have no doubt that with some judicious tweaking of the various html, css, and javascript we could achieve a satisfactory presentation.  However, and this is one of my major misgivings about GeoDjango, we are using a deprecated version of OpenLayers (2.13) rather than the [current version](http://openlayers.org/).  So I won't take this any further.  Let's see if we can get the same result using Leaflet.   
 
 # Phase 2:  Serve A Minimal Slippy Map With Leaflet   
 
