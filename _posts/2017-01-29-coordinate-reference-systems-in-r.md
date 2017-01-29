@@ -1,5 +1,8 @@
-Coordinate Reference Systems in R
-================
+---
+layout: post
+comments: true
+title: Coordinate Reference Systems in R
+---
 
 A question on the R-sig-geo mailing list came up that got me thinking about how much I know about coordinate reference systems (CRS) when working with spatial data in R. Turns out I know how to do the basic stuff, but it's hard to remember how everything works together, so to aid my memory and for anyone with the question, here are some basic methods to answer the question: How do I make sure all my data is in the same coordinate system?
 
