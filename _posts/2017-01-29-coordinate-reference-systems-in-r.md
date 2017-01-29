@@ -236,4 +236,4 @@ plot(transformed_shapefile,add=TRUE)
 
 ![](../images/post5/check_results-1.png)
 
-Note the *very* different appearance - this is what we would expect when changing to a radially different projection.
+Note the *very* different appearance - this is what we would expect when changing to a radically different projection.
