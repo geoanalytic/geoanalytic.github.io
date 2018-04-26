@@ -388,7 +388,7 @@ This should give a result as below:
 
 Awesome,  now we can write some code.    
 
-> A note about test code:  When we run the django startapp command, a file called `tests.py` is created but we are not using it.  Instead we created a file called `test_models.py`.  The reason for this is that the pytest library looks for files named `test_*.py` while djangos test runner looks for files that match `test*.py`. This way we can test using the command shown above, or with the command `docker-compose -f dev.yml run py.test`   
+> A note about test code:  When we run the django startapp command, a file called `tests.py` is created but we are not using it.  Instead we created a file called `test_models.py`.  The reason for this is that the pytest library looks for files named `test_*.py` while djangos test runner looks for files that match `test*.py`. This way we can test using the command shown above, or with the command `docker-compose -f dev.yml run django py.test`   
 
 ## Create A Location Model   
 
