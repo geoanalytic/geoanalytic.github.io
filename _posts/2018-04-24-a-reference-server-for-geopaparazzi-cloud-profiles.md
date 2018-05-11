@@ -88,7 +88,7 @@ Creating volume "geopaptestserver_postgres_data_local" with default driver
 Creating volume "geopaptestserver_postgres_backup_local" with default driver
 Creating geopaptestserver_postgres_1
 Creating geopaptestserver_django_1
-$ docker-compose -f local.yml run --rm django py.test
+$ docker-compose -f local.yml run django py.test
 PostgreSQL is up - continuing...
 Test session starts (platform: linux, Python 3.6.1, pytest 3.5.0, pytest-sugar 0.9.1)
 Django settings: config.settings.test (from ini file)
@@ -119,7 +119,7 @@ Superuser created successfully.
 ```
 
 Point your browser to http://127.0.0.1:8000 and you should see the default welcome page.    
-You can construct a profile through the admin interface at http://127.0.0.1:8000/admin, login as the superuser created above.    
+You can construct a profile through the admin interface athttp://127.0.0.1:8000/admin, login as the superuser created above.    
 The RESTful urls include:    
 
 * http://127.0.0.1:8000/projects/    
@@ -128,12 +128,6 @@ The RESTful urls include:
 * http://127.0.0.1:8000/spatialitedbs/    
 * http://127.0.0.1:8000/profiles/    
 * http://127.0.0.1:8000/myprofiles/    (requires login)
-* http://127.0.0.1:8000/userprojects/    (requires login)
-
-You can also interact with the RESTful interface directly, for example using [httpie](https://httpie.org/)
-
-http -f -a user:password http://127.0.0.1:8000/userprojects/ document@test.db
-
 
 
 
