@@ -298,3 +298,11 @@ Return to the main screen and tap the Import (lower left) icon, then tap Cloud P
 ![](../images/post6/import-screen.png)     
 
 ![](../images/post6/profile-select.png)     
+
+That's it for now.  This server currently provides minimal functionality, and contributions from other members of the community are welcome, please feel free to fork the repository and send me a pull request.  I'll be adding more postings shortly on how to:    
+
+* deploy a production version on the cloud    
+* manage email, user accounts and social media signups    
+* store media files on Amazon S3 buckets (and similar services)     
+* add functionality to the Django code, testing and collaboration    
+
