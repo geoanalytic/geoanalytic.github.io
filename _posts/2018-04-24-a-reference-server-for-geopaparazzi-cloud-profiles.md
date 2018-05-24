@@ -194,98 +194,98 @@ If you point your browser at this RESTful url (http://127.0.0.1:8000/myprofiles/
 
 ```json
 {
-"formatVersion": 1.1,
-"profiles": [
-{
-"name": "Vienna",
-"description": "Map Demo",
-"creationdate": "2018-05-24T16:17:42.004742Z",
-"modifieddate": "2018-05-24T16:17:42.004776Z",
-"color": "#FBC02D",
-"active": true,
-"sdcardPath": "MAINSTORAGE",
-"mapView": "48.2129,16.3663,15.0",
-"project": {
-"path": "/geopaparazzi/data/demo/vienna/geopaparazzi_trip_vienna.gpap",
-"modifieddate": "2018-05-24T16:17:37.060229Z",
-"url": "http://172.17.195.132:8000/media/projects/geopaparazzi_trip_vienna.gpap",
-"uploadurl": "http://127.0.0.1:8000/userprojects/",
-"size": "110592"
-},
-"basemaps": [
-{
-"path": "/geopaparazzi/data/demo/vienna/orthofoto_vienna.mapurl",
-"modifieddate": "2018-05-24T16:17:38.197389Z",
-"url": "http://172.17.195.132:8000/media/basemaps/orthofoto_vienna.mapurl",
-"size": "267"
-}
-],
-"spatialitedbs": [
-{
-"path": "/geopaparazzi/data/demo/vienna/wfs_vienna_db_3857.sqlite",
-"modifieddate": "2018-05-24T16:17:39.551436Z",
-"url": "http://172.17.195.132:8000/media/spatialitedbs/wfs_vienna_db_3857.sqlite",
-"size": "9795584",
-"uploadurl": "http://127.0.0.1:8000/userprojects/",
-"visible": [
-"monumfountain"
-]
-}
-],
-"otherfiles": [
-{
-"path": "/geopaparazzi/data/demo/vienna/Josefstadt_isis_brunnen.JPG",
-"modifieddate": "2018-05-24T16:17:40.792060Z",
-"url": "http://172.17.195.132:8000/media/otherfiles/Josefstadt_isis_brunnen.JPG",
-"size": "440927"
-}
-]
-},
-{
-"name": "Bolzano",
-"description": "Notes Demo",
-"creationdate": "2018-05-24T16:17:48.216368Z",
-"modifieddate": "2018-05-24T16:17:48.216407Z",
-"color": "#296139",
-"active": false,
-"sdcardPath": "MAINSTORAGE",
-"mapView": "46.661,11.437,9.0",
-"project": {
-"path": "/geopaparazzi/data/demo/bolzano/geopaparazzi_trip_bolzano.gpap",
-"modifieddate": "2018-05-24T16:17:43.509074Z",
-"url": "http://172.17.195.132:8000/media/projects/geopaparazzi_trip_bolzano.gpap",
-"uploadurl": "http://127.0.0.1:8000/userprojects/",
-"size": "110592"
-},
-"tags": {
-"path": "/geopaparazzi/data/demo/bolzano/bolzano_field_survey_en.json",
-"modifieddate": "2018-05-24T16:17:44.621033Z",
-"url": "http://172.17.195.132:8000/media/tags/bolzano_field_survey_en.json",
-"size": "33247"
-},
-"basemaps": [
-{
-"path": "/geopaparazzi/data/demo/bolzano/mapnik.mapurl",
-"modifieddate": "2018-05-24T16:17:45.743737Z",
-"url": "http://172.17.195.132:8000/media/basemaps/mapnik.mapurl",
-"size": "321"
-}
-],
-"spatialitedbs": [
-{
-"path": "/geopaparazzi/data/demo/bolzano/wfs_bz_db.sqlite",
-"modifieddate": "2018-05-24T16:17:47.030563Z",
-"url": "http://172.17.195.132:8000/media/spatialitedbs/wfs_bz_db.sqlite",
-"size": "13970432",
-"uploadurl": "http://127.0.0.1:8000/userprojects/",
-"visible": [
-"administrativeunit"
-]
-}
-],
-"otherfiles": []
-}
-]
+    "formatVersion": 1.1,
+    "profiles": [
+        {
+            "name": "Vienna",
+            "description": "Map Demo",
+            "creationdate": "2018-05-24T16:17:42.004742Z",
+            "modifieddate": "2018-05-24T16:17:42.004776Z",
+            "color": "#FBC02D",
+            "active": true,
+            "sdcardPath": "MAINSTORAGE",
+            "mapView": "48.2129,16.3663,15.0",
+            "project": {
+                "path": "/geopaparazzi/data/demo/vienna/geopaparazzi_trip_vienna.gpap",
+                "modifieddate": "2018-05-24T16:17:37.060229Z",
+                "url": "http://172.17.195.132:8000/media/projects/geopaparazzi_trip_vienna.gpap",
+                "uploadurl": "http://127.0.0.1:8000/userprojects/",
+                "size": "110592"
+            },
+            "basemaps": [
+                {
+                    "path": "/geopaparazzi/data/demo/vienna/orthofoto_vienna.mapurl",
+                    "modifieddate": "2018-05-24T16:17:38.197389Z",
+                    "url": "http://172.17.195.132:8000/media/basemaps/orthofoto_vienna.mapurl",
+                    "size": "267"
+                }
+            ],
+            "spatialitedbs": [
+                {
+                    "path": "/geopaparazzi/data/demo/vienna/wfs_vienna_db_3857.sqlite",
+                    "modifieddate": "2018-05-24T16:17:39.551436Z",
+                    "url": "http://172.17.195.132:8000/media/spatialitedbs/wfs_vienna_db_3857.sqlite",
+                    "size": "9795584",
+                    "uploadurl": "http://127.0.0.1:8000/userprojects/",
+                    "visible": [
+                        "monumfountain"
+                    ]
+                }
+            ],
+            "otherfiles": [
+                {
+                    "path": "/geopaparazzi/data/demo/vienna/Josefstadt_isis_brunnen.JPG",
+                    "modifieddate": "2018-05-24T16:17:40.792060Z",
+                    "url": "http://172.17.195.132:8000/media/otherfiles/Josefstadt_isis_brunnen.JPG",
+                    "size": "440927"
+                }
+            ]
+        },
+        {
+            "name": "Bolzano",
+            "description": "Notes Demo",
+            "creationdate": "2018-05-24T16:17:48.216368Z",
+            "modifieddate": "2018-05-24T16:17:48.216407Z",
+            "color": "#296139",
+            "active": false,
+            "sdcardPath": "MAINSTORAGE",
+            "mapView": "46.661,11.437,9.0",
+            "project": {
+                "path": "/geopaparazzi/data/demo/bolzano/geopaparazzi_trip_bolzano.gpap",
+                "modifieddate": "2018-05-24T16:17:43.509074Z",
+                "url": "http://172.17.195.132:8000/media/projects/geopaparazzi_trip_bolzano.gpap",
+                "uploadurl": "http://127.0.0.1:8000/userprojects/",
+                "size": "110592"
+            },
+            "tags": {
+                "path": "/geopaparazzi/data/demo/bolzano/bolzano_field_survey_en.json",
+                "modifieddate": "2018-05-24T16:17:44.621033Z",
+                "url": "http://172.17.195.132:8000/media/tags/bolzano_field_survey_en.json",
+                "size": "33247"
+            },
+            "basemaps": [
+                {
+                    "path": "/geopaparazzi/data/demo/bolzano/mapnik.mapurl",
+                    "modifieddate": "2018-05-24T16:17:45.743737Z",
+                    "url": "http://172.17.195.132:8000/media/basemaps/mapnik.mapurl",
+                    "size": "321"
+                }
+            ],
+            "spatialitedbs": [
+                {
+                    "path": "/geopaparazzi/data/demo/bolzano/wfs_bz_db.sqlite",
+                    "modifieddate": "2018-05-24T16:17:47.030563Z",
+                    "url": "http://172.17.195.132:8000/media/spatialitedbs/wfs_bz_db.sqlite",
+                    "size": "13970432",
+                    "uploadurl": "http://127.0.0.1:8000/userprojects/",
+                    "visible": [
+                        "administrativeunit"
+                    ]
+                }
+            ],
+            "otherfiles": []
+        }
+    ]
 }
 ```
 
