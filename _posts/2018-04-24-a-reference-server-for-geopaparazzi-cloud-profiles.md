@@ -168,7 +168,7 @@ Cloud profiles include a number of downloadable files that must be created and s
     └── wfs_vienna_db_3857.sqlite
 ```
 
-You can inspect the `profiles_demo.json` file to see how everything is referenced.  We have a few options for getting this data on our server.  Using the Django admin interface at http://127.0.0.1:8000/admin we could manually upload each file and fill in the appropriate metadata fields, but this is unneccessary.  The quick way is to use the RESTful endpoints noted above.  This can be done from the command line using [Curl](https://curl.haxx.se/download.html) or [Httpie](https://httpie.org/).  The `load_local.sh` script can be used to load our data using Httpie.  Edit the file and replace the user:password parts with the superuser name and password you created earlier:   
+You can inspect the `profiles_demo.json` file to see how everything is referenced.  We have a few options for getting this data on our server.  Using the Django admin interface at http://127.0.0.1:8000/admin we could manually upload each file and fill in the appropriate metadata fields, but this is unnecessary.  The quick way is to use the RESTful endpoints noted above.  This can be done from the command line using [Curl](https://curl.haxx.se/download.html) or [Httpie](https://httpie.org/).  The `load_local.sh` script can be used to load our data using Httpie.  Edit the file and replace the user:password parts with the superuser name and password you created earlier:   
 
 ```
 $ cd data/demo
@@ -180,11 +180,11 @@ The files should all now be uploaded, but the linkages between the support files
 
 ![](../images/post6/profiles_admin.png)    
 
-You can use this interface to create/replace/update/delete (CRUD) any of the records in the database, but for now we will just use it to fill in the relationships between the profiles and other files and to create profilesets for geopaparazzi users.  Select the `Profiles` link and then the Bolzano option, you will get an edit screen as shown:    
+You can use this interface to create/read/update/delete (CRUD) any of the records in the database, but for now we will just use it to fill in the relationships between the profiles and other files and to create profilesets for geopaparazzi users.  Select the `Profiles` link and then the Bolzano option, you will get an edit screen as shown:    
 
 ![](../images/post6/setup_profile.png)    
 
-You need to select the appropriate Project, Tags, Basemaps, Spatialitedbs and Otherfiles for each profile, then click the SAVE to commit the relationships.  Don't worry about getting it wrong, these edits can be changed at any time, and it is possible to have multiple profiles referencing the same support files.  Follow the same process for the Vienna profile.    
+You need to select the appropriate Project, Tags, Basemaps, Spatialitedbs and Otherfiles for each profile, then click the SAVE button to commit the relationships.  Don't worry about getting it wrong, these edits can be changed at any time, and it is possible to have multiple profiles referencing the same support files.  Follow the same process for the Vienna profile.    
 
 Now go to http://127.0.0.1:8000/admin/profilesets which is where the user is linked to one or more profiles.  Click the ADD PROFILE SET button to get a window as shown, select the user and one or more of the Profiles and click SAVE.    
 
@@ -295,9 +295,9 @@ Now we can test with Geopaparazzi.  On your mobile, start the app and select the
 
 Return to the main screen and tap the Import (lower left) icon, then tap Cloud Profiles.  The Vienna and Bolzano profiles should be shown as available for download.   
 
-![](../images/post6/import-screen.png)     
+![](../images/post6/import-screen.png){:height="50%" width="50%"}     
 
-![](../images/post6/profile-select.png)     
+![](../images/post6/profile-select.png){:height="50%" width="50%"}     
 
 That's it for now.  This server currently provides minimal functionality, and contributions from other members of the community are welcome, please feel free to fork the repository and send me a pull request.  I'll be adding more postings shortly on how to:    
 
