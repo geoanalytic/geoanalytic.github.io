@@ -291,7 +291,7 @@ If you point your browser at this RESTful url (http://127.0.0.1:8000/myprofiles/
 
 Now we can test with Geopaparazzi.  On your mobile, start the app and select the settings (gear) icon, then select Cloud Server Settings and fill in the user, password and Cloud Profiles URL as shown:    
 
-![](../images/post6/cloudprofile-setup.png)   
+![](../images/post6/cloudprofile-setup.png){:height="50%" width="50%"}   
 
 Return to the main screen and tap the Import (lower left) icon, then tap Cloud Profiles.  The Vienna and Bolzano profiles should be shown as available for download.   
 
