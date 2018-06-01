@@ -63,13 +63,13 @@ You will be asked for some values, refer to the previous post for more detail.  
 
 Now cd into the directory that was just created for you and have a look at the contents.  We will need to edit a few configuration files.  These files are found in several locations that you should be aware of, although most should be fine with the default values.  Some important details are located at:    
 
-Category | File/Locations    
----------|---------------
-Docker Config | production.yml, /compose folders
-Django Config | /config and /config/settings folders
-Site specific stuff | /.envs folders
+| Category | File/Locations |    
+|----------|----------------|
+|Docker Config | production.yml, /compose folders|
+|Django Config | /config and /config/settings folders|
+|Site specific stuff | /.envs folders|
 
-A key feature of the (Cookiecutter-Django)[https://cookiecutter-django.readthedocs.io/en/latest/] approach is that values important to security and inter-container coordination are stored as environment variables and injected when the container is started.  These values can be found in the .envs directory which should look like this:   
+A key feature of the [Cookiecutter-Django](https://cookiecutter-django.readthedocs.io/en/latest/) approach is that values important to security and inter-container coordination are stored as environment variables and injected when the container is started.  These values can be found in the .envs directory which should look like this:   
 
 ```
 .envs
