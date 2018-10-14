@@ -289,7 +289,7 @@ If you point your browser at this RESTful url (http://127.0.0.1:8000/myprofiles/
 }
 ```
 
-Now we can test with Geopaparazzi.  On your mobile, start the app and select the settings (gear) icon, then select Cloud Server Settings and fill in the user, password and Cloud Profiles URL as shown:    
+Now we can test with Geopaparazzi.  You will need to figure out the IP address of the computer the server is running on.  On Linux, use the command `hostname -I`.  On Windows, the command `ipconfig` should work.  On your mobile, start the app and select the settings (gear) icon, then select Cloud Server Settings and fill in the user, password and Cloud Profiles URL as shown:    
 
 ![](../images/post6/cloudprofile-setup.png){:height="50%" width="50%"}   
 

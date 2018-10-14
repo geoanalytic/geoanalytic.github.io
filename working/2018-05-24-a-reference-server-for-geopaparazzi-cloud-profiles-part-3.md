@@ -10,7 +10,7 @@ At the time, the server offered the minimum amount of functionality to support c
 
 ## map and image views for uploaded tracks and notes     
 
-![](../images/post7/trackview.png)    
+![](../images/post7/trackview.png)     
 ![](../images/post7/noteview.png)    
 
 ## a tool for building Geopaparazzi Forms (tags.json type files)    
