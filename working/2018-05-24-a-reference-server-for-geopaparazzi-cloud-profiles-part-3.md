@@ -11,17 +11,20 @@ At the time, the server offered the minimum amount of functionality to support c
 ## map and image views for uploaded tracks and notes     
 
 ![](../images/post7/trackview.png)     
-![](../images/post7/noteview.png)    
+
+The functionality on these pages is all client based, written as Django templates accessing the REST API.  This should make it easy for developers to choose their preferred framework.   
+
+![](../images/post7/notesview.png)    
 
 ## a tool for building Geopaparazzi Forms (tags.json type files)    
 
 ![](../images/post7/formbuilder.png)    
 
-* asynchronous processing of uploaded user projects    
+## asynchronous processing of uploaded user projects    
 
 ## geoJSON feeds of spatial data    
 
-![](../images/post7qgis_geojson.png)    
+![](../images/post7/qgis_geojson.png)    
 
 In this post, I'll briefly describe how to set up the server on a local machine and demonstrate how to develop new functionality.   
 
@@ -105,7 +108,7 @@ Next, point your browser at http://localhost:8000/admin, login with your superus
 
  You will need to figure out the IP address of the computer the server is running on.  On Linux, use the command `hostname -I`.  On Windows, the command `ipconfig` should work.  On your mobile, start the app and select the settings (gear) icon, then select Cloud Server Settings and fill in the user, password and Cloud Profiles URL as shown:    
 
-![](../images/post6/cloudprofile-setup.png){:height="50%" width="50%"}   
+![](../images/post6/cloudprofile-setup.png){:height="25%" width="25%"}   
 
 7)  Download the cloud profiles
 # What Now?     
