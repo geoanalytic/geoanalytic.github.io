@@ -8,7 +8,7 @@ In two [previous](https://geoanalytic.github.io/a-reference-server-for-geopapara
 
 At the time, the server offered the minimum amount of functionality to support cloud profiles - namely storing and serving the various basemaps, forms, and other files to the app.  Since then, we have added some useful capabilities that I hope others will find useful, including:    
 
-## map and image views for uploaded tracks and notes     
+## Map and image views for uploaded tracks and notes     
 
 ![](../images/post7/trackview.png)     
 
@@ -16,11 +16,13 @@ The functionality on these pages is all client based, written as Django template
 
 ![](../images/post7/notesview.png)    
 
-## a tool for building Geopaparazzi Forms (tags.json type files)    
+## A tool for building Geopaparazzi Forms (tags.json type files)    
 
 ![](../images/post7/formbuilder.png)    
 
-## asynchronous processing of uploaded user projects    
+## Asynchronous processing of uploaded user projects    
+
+Using [celery](http://www.celeryproject.org/) to handle ad hoc and scheduled background tasks.    
 
 ## geoJSON feeds of spatial data    
 
@@ -30,15 +32,16 @@ In this post, I'll briefly describe how to set up the server on a local machine 
 
 # Setting Up For Development    
 
-As described in the [origninal post](https://geoanalytic.github.io/a-reference-server-for-geopaparazzi-cloud-profiles/), the system is built using [docker-compose](https://docs.docker.com/compose/) and [cookiecutter](https://cookiecutter.readthedocs.io/en/latest/).  This makes it really easy to get up and running with the potential to move to a full production server when you are ready.  Here are the steps required to get a local version of the server running:    
+As described in the [origninal post](https://geoanalytic.github.io/a-reference-server-for-geopaparazzi-cloud-profiles/), the system is built using [docker-compose](https://docs.docker.com/compose/) and [cookiecutter](https://cookiecutter.readthedocs.io/en/latest/).  This makes it really easy to get up and running with the potential to move to a full production server when you are ready.  Here are the steps required to get a local version of the server running.      
 
-0.  Open a command window and create a directory
-Create a directory to hold the project source code and demo data you will download
+> Note that if you are using Windows, there are additional steps that must be taken to ensure everything runs correctly.  If you are using Linux (and probably MacOS) you can safely skip any of the steps that are formated like this.    
+>   Open a command window and create a directory
+>   Create a directory to hold the project source code and demo data you will download
 
-```
-$ mkdir /grs
-$ cd /grs
-```
+>  ```
+>  $ mkdir /grs
+>  $ cd /grs
+>  ```
 
 1.  Install cookiecutter    
 
