@@ -95,7 +95,7 @@ The second command will prompt you to enter a username, email and password for t
 
 5)  Now load the demo data     
 
-Download the demo data from [here](https://drive.google.com/open?id=1BK2XEb3MhOMf9cAgh1WMEjFt6PlRLJeQ).  Note that you need to install [Httpie](https://httpie.org/) and edit the load_local.sh file, replacing `user:password` with the values you provided for the superuser and your server IP address for the `uploadurl` entries.     
+Download the demo data from [here](https://drive.google.com/open?id=12HwGhqdFNvZwS5Y6iO1dC81HWZQbsPnu).  Note that you need to install [Httpie](https://httpie.org/) and edit the load_local.sh file, replacing `user:password` with the values you provided for the superuser and your server IP address for the `uploadurl` entries.     
 
 ```
 $ cd location/of/demo/data

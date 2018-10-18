@@ -147,7 +147,7 @@ The RESTful urls all require login credentials, and include:
 
 # Load Some Data    
 
-Cloud profiles include a number of downloadable files that must be created and supplied in some way.  Using [this sample dataset](https://drive.google.com/file/d/1r5EJa4iyERstP3Z_Gd3_UYbHviP92ePX/view?usp=sharing), we can walk through the steps to set up a cloud profile on our local server.  First download and unzip the sample dataset.  You will see a number of files, organized something like this:    
+Cloud profiles include a number of downloadable files that must be created and supplied in some way.  Using [this sample dataset](https://drive.google.com/open?id=12HwGhqdFNvZwS5Y6iO1dC81HWZQbsPnu), we can walk through the steps to set up a cloud profile on our local server.  First download and unzip the sample dataset.  You will see a number of files, organized something like this:    
 
 ```
 ./demo
