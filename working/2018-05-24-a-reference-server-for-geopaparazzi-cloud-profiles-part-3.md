@@ -56,6 +56,7 @@ If you are using Windows, you will need to do some extra stuff:
 3) CD into the directory created by the cookiecutter process and then build and run the containers:    
 
 ```
+$ cd geopaparazzi_reference_server
 $ docker-compose -f local.yml build
 $ docker-compose -f local.yml up -d
 $ docker-compose -f local.yml ps
