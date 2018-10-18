@@ -32,6 +32,14 @@ In this post, I'll briefly describe how to set up the server on a local machine 
 
 As described in the [origninal post](https://geoanalytic.github.io/a-reference-server-for-geopaparazzi-cloud-profiles/), the system is built using [docker-compose](https://docs.docker.com/compose/) and [cookiecutter](https://cookiecutter.readthedocs.io/en/latest/).  This makes it really easy to get up and running with the potential to move to a full production server when you are ready.  Here are the steps required to get a local version of the server running:    
 
+0.  Open a command window and create a directory
+Create a directory to hold the project source code and demo data you will download
+
+```
+$ mkdir /grs
+$ cd /grs
+```
+
 1.  Install cookiecutter    
 
 ```
